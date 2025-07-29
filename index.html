@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para o amor da minha vida 💖</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Arial", sans-serif;
+      background: #000;
+      color: white;
+      overflow-x: hidden;
+    }
+    .stars {
+      width: 100%;
+      height: 100vh;
+      background: black url('https://i.gifer.com/7PLM.gif') repeat;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    button {
+      padding: 12px 24px;
+      margin: 10px;
+      border: none;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #sim {
+      background-color: #ff69b4;
+      color: white;
+    }
+    #nao {
+      background-color: #999;
+      color: white;
+    }
+    .hidden {
+      display: none;
+    }
+    .love-progress {
+      width: 80%;
+      margin: 20px auto;
+    }
+    .bar {
+      height: 25px;
+      background: pink;
+      width: 0%;
+      border-radius: 20px;
+      transition: width 0.3s;
+    }
+    .heart {
+      font-size: 40px;
+      cursor: pointer;
+    }
+    .floating-heart {
+      position: absolute;
+      animation: floatUp 2s ease-in infinite;
+    }
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-200px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- MÚSICA DE FUNDO -->
+<audio autoplay loop>
+  <source src="https://drive.google.com/uc?export=download&id=16wQeQqIIa6dOq61q8FY9GZQYxbper-_k" type="audio/mpeg">
+</audio>
+
+<!-- TELA INICIAL -->
+<div id="inicio" class="stars">
+  <img src="https://photos.app.goo.gl/VbNuzFaSjDczvYbu8" alt="Foto principal" style="width: 200px; b
+<!-- TELA DO AMOR -->
+<div id="amor" class="hidden stars">
+  <h1>O quanto me ama?</h1>
+  <div class="heart" id="heart">💖</div>
+  <div class="love-progress">
+    <div id="barra" class="bar"></div>
+    <p>Nível de amor: <span id="porcentagem">0%</span></p>
+  </div>
+</div>
+
+<!-- Corações flutuantes -->
+<script>
+  let porcentagem = 0;
+  const heart = document.getElementById("heart");
+  const barra = document.getElementById("barra");
+  const valor = document.getElementById("porcentagem");
+
+  heart.addEventListener("click", () => {
+    if (porcentagem < 100) {
+      porcentagem += 10;
+      barra.style.width = porcentagem + "%";
+      valor.textContent = porcentagem + "%";
+
+      const floating = document.createElement("div");
+      floating.classList.add("floating-heart");
+      floating.textContent = Math.random() > 0.5 ? "❤️" : "🤍";
+      floating.style.left = Math.random() * 90 + "%";
+      floating.style.bottom = "0";
+      document.body.appendChild(floating);
+
+      setTimeout(() => {
+        floating.remove();
+      }, 2000);
+
+      if (porcentagem === 100) {
+        setTimeout(() => {
+          document.getElementById("amor").classList.add("hidden");
+          document.getElementById("quiz").classList.remove("hidden");
+        }, 1000);
+      }
+    }
+  });
+
+  document.getElementById("sim").addEventListener("click", () => {
+    document.getElementById("inicio").classList.add("hidden");
+    document.getElementById("amor").classList.remove("hidden");
+  });
+</script>
+<!-- TELA DO QUIZ -->
+<div id="quiz" class="hidden stars">
+  <h1>Quiz sobre noize🫶🏻</h1>
+  <button onclick="startQuiz()" style="background-color: pink; color: white;">Clique para começar</button>
+  <div id="quizContainer" class="hidden">
+    <h2 id="pergunta"></h2>
+    <div id="respostas"></div>
+  </div>
+</div>
+
+<script>
+  const perguntas = [
+    {
+      pergunta: "E do nosso príncipe?",
+      respostas: [
+        { texto: "Jhonatan", correta: false },
+        { texto: "Noah", correta: true },
+        { texto: "Vitor", correta: false },
+        { texto: "Luan", correta: false }
+      ]
+    },
+    {
+      pergunta: "Onde foi nosso primeiro beijo?",
+      respostas: [
+        { texto: "Restaurante", correta: false },
+        { texto: "Cinema", correta: true },
+        { texto: "Shopping", correta: false },
+        { texto: "Praça", correta: false }
+      ]
+    },
+    {
+      pergunta: "Qual o nome da nossa futura princesa??",
+      respostas: [
+        { texto: "Gabrielle", correta: false },
+        { texto: "Cecília", correta: false },
+        { texto: "Vanessa", correta: false },
+        { texto: "Stella", correta: true }
+      ]
+    },
+    {
+      pergunta: "Qual nosso momento mais especial??",
+      respostas: [
+        { texto: "Cinema", correta: false },
+        { texto: "Nosso primeiro eu te amo", correta: false },
+        { texto: "Quando te dei um presente", correta: false },
+        { texto: "Todas acima", correta: true }
+      ]
+    }
+  ];
+
+  let indiceAtual = 0;
+
+  function startQuiz() {
+    document.querySelector("#quiz button").classList.add("hidden");
+    document.getElementById("quizContainer").classList.remove("hidden");
+    mostrarPergunta();
+  }
+
+  function mostrarPergunta() {
+    const p = perguntas[indiceAtual];
+    document.getElementById("pergunta").innerText = p.pergunta;
+    const respostasDiv = document.getElementById("respostas");
+    respostasDiv.innerHTML = "";
+
+    p.respostas.forEach(r => {
+      const btn = document.createElement("button");
+      btn.innerText = r.texto;
+      btn.style.margin = "5px";
+      btn.onclick = () => {
+        if (r.correta) {
+          btn.style.backgroundColor = "green";
+          btn.innerHTML += " ✔️";
+          setTimeout(() => {
+            indiceAtual++;
+            if (indiceAtual < perguntas.length) {
+              mostrarPergunta();
+            } else {
+              document.getElementById("quiz").classList.add("hidden");
+              document.getElementById("parabens").classList.remove("hidden");
+            }
+          }, 1000);
+        } else {
+          btn.style.backgroundColor = "red";
+          btn.innerHTML += " ✖️";
+        }
+      };
+      respostasDiv.appendChild(btn);
+    });
+  }
+</script>
+<!-- TELA DE PARABÉNS -->
+<div id="parabens" class="hidden stars">
+  <h1>Parabéns minha princesa!!</h1>
+  <h2>Você respondeu tudo certinho❤️!</h2>
+</div>
+
+<!-- TELA FINAL: FOTOS + TEXTO + CRONÔMETRO -->
+<div id="final" class="hidden stars" style="flex-direction: column; padding: 20px;">
+  <h2>Nosso tempo juntos:</h2>
+  <h3 id="cronometro"></h3>
+
+  <!-- FOTOS -->
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 20px 0;">
+    <img src="https://photos.app.goo.gl/qCdiDZdvYsKq1ewD9" width="150" style="border-radius: 10px;">
+    <img src="https://photos.app.goo.gl/63ibCKUzxJq5ndDe9" width="150" style="border-radius: 10px;">
+    <img src="https://photos.app.goo.gl/eLpgNq1vJzPGbc9r8" width="150" style="border-radius: 10px;">
+    <img src="https://photos.app.goo.gl/FbmtGfzTVXuyaNaQA" width="150" style="border-radius: 10px;">
+    <img src="https://photos.app.goo.gl/Ur9o3mRmx49VasuG8" width="150" style="border-radius: 10px;">
+    <img src="https://photos.app.goo.gl/cGEd9kjKZ1joweeA6" width="150" style="border-radius: 10px;">
+  </div>
+
+  <!-- TEXTO FINAL -->
+  <p style="max-width: 700px; font-size: 16px; line-height: 1.6; text-align: center;">
+    só quero agradecer por tudo, para o meu inesperado mais esperado, tão rápido mas parece que te amei por uma vida inteira. Vc foi a melhor coisa que poderia ter acontecido comigo. Obrigado por ser essa pessoa maravilhosa.<br><br>
+
+    Quero isso fique para sempre recordado para que você nunca esqueça o quanto eu te amo e o quanto eu sou feliz de ter você ao meu lado. Em meio a tanto caos e confusão você é meu refúgio, com todos os nossos desentendimentos, me perdoa por as te deixar com inseguranças e medos, talvez seja porque pegamos intimidade e ficamos mais a vontade para falar o que gostamos ou não e para fazer mais cobranças, a verdade é que nunca me senti tão amado e tão a vontade assim com um pessoa, então as vezes eu não sei lidar. Por isso te peço paciência comigo, porque quero aprender a te amar, quero evoluir com você, como pessoa, como casal e algum dia como os pais que nossos filhos merecem.<br><br>
+
+    Você diz que eu não te elogio, talvez porque eu era acostumado a só te esculachar devido a nossa amizade, mas cada vez que te vejo é como uma chama em meu coração, a cada momento, a cada risada, a cada conversa, sinto como se fosse a primeira vez. Toda vez que te levo para sua casa e vou embora, sinto como se estivesse dado o meu primeiro beijo, indo embora saltitando e deixando aquele menino inocente e bobo tomar conta.<br><br>
+
+    Não sou de criar expectativas com quase nada e nem de sonhar tão alto, mas com você parece que tudo se torna possível, você é a minha única certeza, mesmo com todos os obstáculos, não importa o quão alto eles forem, quero passar eles com você, com a futura mãe dos meus filhos, a menina que está em todas as minhas orações.<br><br>
+
+    Temos tantas opiniões diferentes, tantos gostos, mas no fim, não é sobre ser igual.
+    É sobre encaixar mesmo sendo tão diferente.
+    É sobre se olhar e, mesmo sem entender tudo, sentir que ali tem algo certo.
+    Talvez seja isso o tal “os opostos se atraem” 
+    não porque são opostos, mas porque, de algum jeito, completam o que o outro nem sabia que faltava. Eu te amo muitãoooo.
+  </p>
+</div>
+
+<script>
+  // Mostrar parte final após parabéns
+  setTimeout(() => {
+    document.getElementById("parabens").classList.add("hidden");
+    document.getElementById("final").classList.remove("hidden");
+  }, 6000);
+
+  // Cronômetro
+  const dataInicial = new Date("2024-02-14T00:00:00"); // data de início do namoro (exemplo)
+  const cronometro = document.getElementById("cronometro");
+
+  setInterval(() => {
+    const agora = new Date();
+    const diff = agora - dataInicial;
+
+    const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const horas = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutos = Ma
